@@ -11,7 +11,7 @@ export default function CourseCard() {
         </div>
       </div>
       <div className="card-body">
-        <Link href="/courses" passHref>
+        <Link href="/courses/test" passHref>
           <div className="cursor-pointer hover:text-red-500">
             <h2 className="card-title">
               [CQ] PTUDWNC - 18_3

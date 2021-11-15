@@ -12,7 +12,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex justify-center h-screen items-center text-red-500 font-bold text-5xl bg-white">
+      <div className="flex justify-center h-screen items-center text-red-500 font-bold text-5xl">
         Hello World!
       </div>
     </>
