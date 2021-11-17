@@ -1,3 +1,4 @@
+import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Fragment, memo } from "react";
 import { Popover, Transition } from "@headlessui/react";
@@ -99,6 +100,7 @@ function classNames(...classes) {
 }
 
 function Header() {
+  const { data: session } = useSession();
   return (
     <Popover className="sticky top-0 bg-white z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -297,18 +299,30 @@ function Header() {
               )}
             </Popover> */}
           </Popover.Group>
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <Link href="/auth/login">
-              <a className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-                Login
+          {session ? (
+            <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+              <a
+                onClick={() => signOut()}
+                href="#"
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+              >
+                {session.user.email} - Sign out
               </a>
-            </Link>
-            <Link href="/auth/register">
-              <a className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                Register
-              </a>
-            </Link>
-          </div>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+              <Link href="/auth/login">
+                <a className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                  Login
+                </a>
+              </Link>
+              <Link href="/auth/register">
+                <a className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                  Register
+                </a>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -386,19 +400,31 @@ function Header() {
                 ))} */}
               </div>
               <div>
-                <Link href="/auth/register">
-                  <a className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                    Register
+                {session ? (
+                  <a
+                    onClick={() => signOut()}
+                    href="#"
+                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                  >
+                    {session.user.email} - Sign out
                   </a>
-                </Link>
-                <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  Existing customer?{" "}
-                  <Link href="/auth/login">
-                    <a className="text-indigo-600 hover:text-indigo-500">
-                      Login
-                    </a>
-                  </Link>
-                </p>
+                ) : (
+                  <>
+                    <Link href="/auth/register">
+                      <a className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Register
+                      </a>
+                    </Link>
+                    <p className="mt-6 text-center text-base font-medium text-gray-500">
+                      Existing customer?{" "}
+                      <Link href="/auth/login">
+                        <a className="text-indigo-600 hover:text-indigo-500">
+                          Login
+                        </a>
+                      </Link>
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
