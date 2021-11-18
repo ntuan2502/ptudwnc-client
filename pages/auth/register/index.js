@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import validator from "email-validator";
+import { useRouter } from "next/router";
+import { getApiUrl } from "../../../lib/Utils";
 
 export default function Register() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,7 +20,25 @@ export default function Register() {
     } else if (password !== confirmPassword) {
       setAlert("Passwords are not the same!");
     } else {
-      console.log("OK");
+      fetch(getApiUrl("/auth/register"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success == false) {
+            setAlert(data.message);
+          } else {
+            setAlert(data.message);
+            router.push("/auth/login");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   }
 

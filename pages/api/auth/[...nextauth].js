@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { getApiUrl } from "../../../lib/Utils";
 
 export default NextAuth({
   // Configure one or more authentication providers
@@ -31,7 +32,7 @@ export default NextAuth({
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        const res = await fetch(process.env.API_URL + "/auth/login", {
+        const res = await fetch(getApiUrl("/auth/login"), {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" },
