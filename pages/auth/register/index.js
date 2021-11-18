@@ -1,5 +1,26 @@
-import Link from "next/link"
+import Link from "next/link";
+import { useState } from "react";
+import validator from "email-validator";
+
 export default function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [alert, setAlert] = useState("");
+
+  function handleSubmit() {
+    setAlert("");
+    if (!validator.validate(email)) {
+      setAlert("Invalid email!");
+    } else if (password == "" || confirmPassword == "") {
+      setAlert("Password required");
+    } else if (password !== confirmPassword) {
+      setAlert("Passwords are not the same!");
+    } else {
+      console.log("OK");
+    }
+  }
+
   return (
     <div className="flex justify-center min-h-screen items-center">
       <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
@@ -41,7 +62,7 @@ export default function Register() {
           </button>
         </div>
         <div className="mt-8">
-          <form action="#" autoComplete="off">
+          <div>
             <div className="flex flex-col mb-2">
               <div className="flex relative ">
                 <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
@@ -56,10 +77,11 @@ export default function Register() {
                   </svg>
                 </span>
                 <input
-                  type="text"
-                  id="sign-in-email"
+                  type="email"
                   className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -78,9 +100,10 @@ export default function Register() {
                 </span>
                 <input
                   type="password"
-                  id="sign-in-email"
                   className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -99,31 +122,36 @@ export default function Register() {
                 </span>
                 <input
                   type="password"
-                  id="sign-in-email"
                   className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
             <div className="flex items-center mb-6 -mt-4">
               <div className="flex ml-auto">
-                <a
+                <div className="inline-flex text-xs font-bold text-red-500 sm:text-sm dark:text-gray-100 hover:text-gray-700 dark:hover:text-white">
+                  {alert}
+                </div>
+
+                {/* <a
                   href="#"
                   className="inline-flex text-xs font-thin text-gray-500 sm:text-sm dark:text-gray-100 hover:text-gray-700 dark:hover:text-white"
                 >
                   Forgot Your Password?
-                </a>
+                </a> */}
               </div>
             </div>
             <div className="flex w-full">
               <button
-                type="submit"
+                onClick={() => handleSubmit()}
                 className="py-2 px-4  bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
               >
                 Register
               </button>
             </div>
-          </form>
+          </div>
         </div>
         <div className="flex items-center justify-center mt-6">
           <a
@@ -133,7 +161,7 @@ export default function Register() {
           >
             <span className="ml-2">Already have an account?</span>
             <Link href="/auth/login">
-              <a className="px-1 text-blue-500">Login</a>
+              <div className="px-1 text-blue-500">Login</div>
             </Link>
           </a>
         </div>
