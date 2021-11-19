@@ -32,7 +32,7 @@ export default function Profile({ _session, _data }) {
   return (
     <div className="flex justify-center">
       <div className="w-full md:w-3/5">
-        {_session ? (
+        {_data && (
           <>
             <div className="hidden sm:block" aria-hidden="true">
               <div className="py-5">
@@ -122,9 +122,6 @@ export default function Profile({ _session, _data }) {
               </div>
             </div>
           </>
-        ) : (
-          ""
-          // <Loading />
         )}
       </div>
     </div>
@@ -143,9 +140,15 @@ export async function getServerSideProps(ctx) {
   });
   if (res.ok) {
     const _data = await res.json();
-    return {
-      props: { _session, _data },
-    };
+    if (_data.success) {
+      return {
+        props: { _session, _data },
+      };
+    } else {
+      return {
+        props: { _session, _data: null },
+      };
+    }
   } else {
     return {
       props: { _session, _data: null },
