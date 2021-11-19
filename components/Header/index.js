@@ -80,7 +80,7 @@ function Header() {
                         <a
                           href="#"
                           className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
-                          onClick={() => signOut({ redirect: false })}
+                          onClick={() => signOut({redirect: true, callbackUrl: "/"})}
                         >
                           Logout
                         </a>
@@ -161,7 +161,7 @@ function Header() {
                         </div>
                       </Link>
                       <div
-                        onClick={() => signOut({ redirect: false })}
+                        onClick={() => signOut({redirect: true, callbackUrl: "/"})}
                         className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                       >
                         Logout

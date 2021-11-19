@@ -82,7 +82,6 @@ export async function getServerSideProps(ctx) {
     },
   });
   const _data = await res.json();
-  console.log(_data);
   return {
     props: { _session, _data },
   };

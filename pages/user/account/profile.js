@@ -109,7 +109,6 @@ export default function Profile({ _session, _data }) {
                       </div>
 
                       <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                        
                         <button
                           onClick={() => handleSubmit()}
                           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -124,7 +123,8 @@ export default function Profile({ _session, _data }) {
             </div>
           </>
         ) : (
-          <Loading />
+          ""
+          // <Loading />
         )}
       </div>
     </div>
@@ -134,15 +134,21 @@ export default function Profile({ _session, _data }) {
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
 
-  const res = await fetch(getApiUrl("/users/" + _session.user._id), {
+  const res = await fetch(getApiUrl("/users/" + _session?.user?._id), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
-  const _data = await res.json();
-  return {
-    props: { _session, _data },
-  };
+  if (res.ok) {
+    const _data = await res.json();
+    return {
+      props: { _session, _data },
+    };
+  } else {
+    return {
+      props: { _session, _data: null },
+    };
+  }
 }
