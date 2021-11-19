@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
+import { getApiUrl } from "../../lib/Utils";
+import { useSession } from "next-auth/react";
 
 export default function AddModal() {
-  const [name, serName] = useState();
-  const [description, setDescription] = useState();
+  const { data: session, status } = useSession();
+  const [alert, setAlert] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -12,7 +16,31 @@ export default function AddModal() {
     setOpen(false);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    setAlert("");
+    if (name == "") {
+      setAlert("Name is required");
+    } else {
+      fetch(getApiUrl("/courses/store"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.jwt}`,
+        },
+        body: JSON.stringify({ name, description }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data, "Added Course");
+          setName("");
+          setDescription("");
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
 
   return (
     <div>
@@ -51,10 +79,13 @@ export default function AddModal() {
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
+                  <div className="text-red-500">{alert}</div>
                 </label>
                 <input
                   type="text"
                   placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="input input-info input-bordered"
                 />
                 <label className="label">
@@ -63,6 +94,8 @@ export default function AddModal() {
                 <textarea
                   className="textarea h-24 textarea-bordered textarea-info"
                   placeholder="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </div>
 

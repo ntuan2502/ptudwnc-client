@@ -1,5 +1,5 @@
 import Link from "next/link";
-export default function CourseCard() {
+export default function CourseCard({ course }) {
   return (
     <div className="w-96 card bordered">
       <figure>
@@ -11,19 +11,19 @@ export default function CourseCard() {
         </div>
       </div>
       <div className="card-body">
-        <Link href="/courses/test" passHref>
+        <Link href={`/courses/${course.slug}`}>
           <div className="cursor-pointer hover:text-red-500">
             <h2 className="card-title">
-              [CQ] PTUDWNC - 18_3
+              {course.name}
               <div className="badge mx-2 badge-secondary">NEW</div>
             </h2>
-            <p>PTUDWNC</p>
+            <p>{course.description}</p>
           </div>
         </Link>
 
-        <Link href="/courses" passHref>
+        <Link href={`/courses/${course.slug}`}>
           <p className="cursor-pointer hover:text-red-500">
-            <a>Nguyễn Huy Khánh</a>
+            <a>{course.owner.name}</a>
           </p>
         </Link>
         <div className="justify-end card-actions">

@@ -1,5 +1,7 @@
 import Link from "next/link";
-export default function Test() {
+import { getSession } from "next-auth/react";
+import { getApiUrl } from "../../../lib/Utils";
+export default function CoursePage({ _session, _data }) {
   return (
     <div className="">
       <div className="flex justify-center">
@@ -10,9 +12,9 @@ export default function Test() {
           />
           <div className="absolute bottom-1 left-1 md:bottom-5 md:left-5 text-white">
             <div className="text-md md:text-4xl font-bold">
-              [CQ] PTUDWNC - 18_3
+              {_data.course.name}
             </div>
-            <div className="text-md md:text-xl">PTUDWNC</div>
+            <div className="text-md md:text-xl">{_data.course.description}</div>
           </div>
           <div className="absolute bottom-1 right-1 md:bottom-5 md:right-5">
             <svg
@@ -37,13 +39,15 @@ export default function Test() {
           <div className="card shadow-lg w-64 bg-gray-300">
             <div className="card-body">
               <h2 className="card-title">Mã lớp</h2>
-              <p>uujy7af</p>
+              <p>{_data.course.joinId}</p>
             </div>
           </div>
           <div className="card shadow-lg w-64 bg-gray-300 my-3">
             <div className="card-body">
               <div className="flex justify-center font-bold">
-                <Link href="/courses/test/users">Mọi người</Link>
+                <Link href={`/courses/${_data.course.slug}/users`}>
+                  Mọi người
+                </Link>
               </div>
             </div>
           </div>
@@ -51,4 +55,20 @@ export default function Test() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  const _session = await getSession(ctx);
+
+  const res = await fetch(getApiUrl("/courses/" + ctx.query.slug), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${_session?.jwt}`,
+    },
+  });
+  const _data = await res.json();
+  return {
+    props: { _session, _data },
+  };
 }
