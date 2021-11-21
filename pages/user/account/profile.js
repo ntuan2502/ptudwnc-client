@@ -4,9 +4,10 @@ import Loading from "../../../components/Loading";
 import { getApiUrl } from "../../../lib/Utils";
 
 export default function Profile({ _session, _data }) {
+  console.log("data", _data);
   const [studentId, setStudentId] = useState(_data?.user?.student);
   const [email, setEmail] = useState(_data?.user?.email);
-  const [name, setName] = useState(_data?.user?.name);
+  const [name, setName] = useState(_data?.user?.fullName);
   const [alert, setAlert] = useState("");
 
   const handleSubmit = async () => {
@@ -130,7 +131,7 @@ export default function Profile({ _session, _data }) {
 
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
-
+  // console.log(_session);
   const res = await fetch(getApiUrl("/users/" + _session?.user?._id), {
     method: "GET",
     headers: {
@@ -140,6 +141,7 @@ export async function getServerSideProps(ctx) {
   });
   if (res.ok) {
     const _data = await res.json();
+    console.log(_data);
     if (_data.success) {
       return {
         props: { _session, _data },

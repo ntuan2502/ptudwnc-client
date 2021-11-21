@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
+import axios from "axios";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import { getApiUrl } from "../../../lib/Utils";
 
 export default NextAuth({
@@ -9,6 +11,10 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     }),
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -49,11 +55,38 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: async ({ account, token, user }) => {
       // first time jwt callback is run, user object is available
+      if(account) {
+        let data;
+        if(account.provider === "google") {
+          const res = await axios.get(getApiUrl('/auth/google/token') , {
+            headers: {
+              access_token: account.access_token
+            }
+          });
+          data = res.data;
+        } else if(account.provider === "facebook") {
+          const res = await axios.get(getApiUrl('/auth/facebook/token'), {
+            headers: {
+              access_token: account.access_token
+            }
+          });
+          data = res.data;
+        }
+        
+        token.jwt = data.jwt;
+        token.user = data.user;
+        return token;
+      }
+
       if (user) {
-        token.jwt = user.jwt;
-        token.user = user.user;
+        if(token.jwt) {
+          return token;
+        } else {
+          token.jwt = user.jwt;
+          token.user = user.user;
+        }
       }
 
       return token;
