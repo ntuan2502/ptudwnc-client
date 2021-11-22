@@ -1,9 +1,10 @@
-import Head from "next/head";
-import Image from "next/image";
-import AddModal from "../../components/Course/AddModal";
-import CourseCard from "../../components/Course/Card";
-import { getSession } from "next-auth/react";
-import { getApiUrl } from "../../lib/Utils";
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import AddModal from '../../components/Course/AddModal';
+import CourseCard from '../../components/Course/Card';
+import { getSession } from 'next-auth/react';
+import { getApiUrl } from '../../lib/Utils';
 
 export default function CoursesPage({ _session, _data }) {
   return (
@@ -11,6 +12,9 @@ export default function CoursesPage({ _session, _data }) {
       {_session && (
         <div className="flex justify-center items-center">
           <AddModal />
+          <Link href="/courses/join">
+            <a className="btn btn-accent ml-3">Tham gia</a>
+          </Link>
         </div>
       )}
       <div className="py-10 sm:px-20 flex justify-center relative">
@@ -27,10 +31,10 @@ export default function CoursesPage({ _session, _data }) {
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
 
-  const res = await fetch(getApiUrl("/courses"), {
-    method: "GET",
+  const res = await fetch(getApiUrl('/courses'), {
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
