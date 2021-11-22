@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { getSession } from "next-auth/react";
-import { getApiUrl } from "../../../lib/Utils";
+import Link from 'next/link';
+import { getSession } from 'next-auth/react';
+import { getApiUrl } from '../../../lib/Utils';
+import axios from 'axios';
 export default function CoursePage({ _session, _data }) {
   return (
     <>
@@ -40,12 +41,14 @@ export default function CoursePage({ _session, _data }) {
           </div>
           <div className="flex justify-center items-center">
             <div className="w-1/2">
-              <div className="card shadow-lg w-64 bg-gray-300">
-                <div className="card-body">
-                  <h2 className="card-title">Mã lớp</h2>
-                  <p>{_data.course.joinId}</p>
+              {_data.course.joinId && (
+                <div className="card shadow-lg w-64 bg-gray-300">
+                  <div className="card-body">
+                    <h2 className="card-title">Mã lớp</h2>
+                    <p>{_data.course.joinId}</p>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="card shadow-lg w-64 bg-gray-300 my-3">
                 <div className="card-body">
                   <div className="flex justify-center font-bold">
@@ -66,16 +69,30 @@ export default function CoursePage({ _session, _data }) {
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
 
-  const res = await fetch(getApiUrl("/courses/" + ctx.query.slug), {
-    method: "GET",
+  const res = await fetch(getApiUrl('/courses/' + ctx.query.slug), {
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
   if (res.ok) {
     const _data = await res.json();
     if (_data.success) {
+      const invite = await axios.get(
+        `${getApiUrl()}/courses/${_data.course._id}/invitation`,
+        {
+          headers: {
+            Authorization: `Bearer ${_session?.jwt}`,
+          },
+        }
+      );
+      if (invite.data.success) {
+        _data.course.joinId = invite.data.invitation.inviteCode;
+      } else {
+        _data.course.joinId = null;
+      }
+
       return {
         props: { _session, _data },
       };

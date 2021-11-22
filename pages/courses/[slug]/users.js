@@ -1,70 +1,79 @@
-import { getSession } from "next-auth/react";
-import { getApiUrl } from "../../../lib/Utils";
-import { useState } from "react";
-import InviteModal from "../../../components/Course/InviteModal";
+import { getSession } from 'next-auth/react';
+import { getApiUrl } from '../../../lib/Utils';
+import { useState } from 'react';
+import InviteModal from '../../../components/Course/InviteModal';
 
 export default function Users({ _session, _data }) {
   const [showInviteTeacher, setShowInviteTeacher] = useState(false);
   const [showInviteStudent, setShowInviteStudent] = useState(false);
-  const [email, setEmail] = useState("");
-  function handleInviteTeacherSubmit() {
-    
-  }
+  const [email, setEmail] = useState('');
+  function handleInviteTeacherSubmit() {}
 
-  function handleInviteStudentSubmit() {
+  function handleInviteStudentSubmit() {}
 
-  }
-
-  const inviteTeacherContent = <>
-    <label className="label">
-    <span className="label-text">Email</span>
-    <div className="text-red-500"></div>
-    </label>
-    <input
-      type="text"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      placeholder="Email"
-      className="input input-info input-bordered"
-    />
-  </>
-  const inviteTeacherActions = <>
-    <button
-      onClick={handleInviteTeacherSubmit}
-      className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
-    >
-      Invite
-    </button>
-    <button
-      className="focus:outline-none ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
-      onClick={() => setShowInviteTeacher(false)}
-    >
-      Cancel
-    </button>
-  </>
-  const inviteStudentActions = <>
-    <button
-      onClick={handleInviteStudentSubmit}
-      className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
-    >
-      Invite
-    </button>
-    <button
-      className="focus:outline-none ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
-      onClick={() => setShowInviteStudent(false)}
-    >
-      Cancel
-    </button>
-  </>
+  const inviteTeacherContent = (
+    <>
+      <label className="label">
+        <span className="label-text">Email</span>
+        <div className="text-red-500"></div>
+      </label>
+      <input
+        type="text"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        className="input input-info input-bordered"
+      />
+    </>
+  );
+  const inviteTeacherActions = (
+    <>
+      <button
+        onClick={handleInviteTeacherSubmit}
+        className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
+      >
+        Invite
+      </button>
+      <button
+        className="focus:outline-none ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
+        onClick={() => setShowInviteTeacher(false)}
+      >
+        Cancel
+      </button>
+    </>
+  );
+  const inviteStudentActions = (
+    <>
+      <button
+        onClick={handleInviteStudentSubmit}
+        className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
+      >
+        Invite
+      </button>
+      <button
+        className="focus:outline-none ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
+        onClick={() => setShowInviteStudent(false)}
+      >
+        Cancel
+      </button>
+    </>
+  );
   return (
     <>
-      {showInviteTeacher && <InviteModal header="Invite teacher"
-        content={inviteTeacherContent} 
-        actions={inviteTeacherActions}/>}
-        {showInviteStudent && <InviteModal header="Invite student"
-        content={inviteTeacherContent} 
-        actions={inviteStudentActions}
-        />}
+      {showInviteTeacher && (
+        <InviteModal
+          header="Invite teacher"
+          content={inviteTeacherContent}
+          actions={inviteTeacherActions}
+        />
+      )}
+      {showInviteStudent && (
+        <InviteModal
+          header="Invite student"
+          content={inviteTeacherContent}
+          actions={inviteStudentActions}
+        />
+      )}
       {_data && (
         <div className="flex justify-center">
           <div className="w-full md:w-3/5">
@@ -105,7 +114,7 @@ export default function Users({ _session, _data }) {
                   <div className="text-3xl px-2">
                     {_data.course.students.length} sinh viên
                   </div>
-                  <button onClick={() => setShowInviteStudent(true)}>  
+                  <button onClick={() => setShowInviteStudent(true)}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"
@@ -129,7 +138,7 @@ export default function Users({ _session, _data }) {
                     className="rounded-full h-12"
                     src="https://lh3.googleusercontent.com/a/default-user=s75-c"
                   />
-                  <div className="p-2">{student.name}</div>
+                  <div className="p-2">{student.fullName}</div>
                 </div>
               ))}
             </div>
@@ -143,10 +152,10 @@ export default function Users({ _session, _data }) {
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
 
-  const res = await fetch(getApiUrl("/courses/" + ctx.query.slug), {
-    method: "GET",
+  const res = await fetch(getApiUrl('/courses/' + ctx.query.slug), {
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
