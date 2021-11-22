@@ -7,7 +7,7 @@ export default function Profile({ _session, _data }) {
   console.log('data', _data);
   const [studentId, setStudentId] = useState(_data?.user?.student);
   const [email, setEmail] = useState(_data?.user?.email);
-  const [name, setName] = useState(_data?.user?.fullName);
+  const [name, setName] = useState(_data?.user?.name);
   const [alert, setAlert] = useState('');
 
   const handleSubmit = async () => {
@@ -18,7 +18,7 @@ export default function Profile({ _session, _data }) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${_session?.jwt}`,
       },
-      body: JSON.stringify({ fullName: name, student: studentId }),
+      body: JSON.stringify({ name, student: studentId }),
     })
       .then((response) => response.json())
       .then((data) => {

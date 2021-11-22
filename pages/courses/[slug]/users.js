@@ -2,14 +2,56 @@ import { getSession } from 'next-auth/react';
 import { getApiUrl } from '../../../lib/Utils';
 import { useState } from 'react';
 import InviteModal from '../../../components/Course/InviteModal';
+import axios from 'axios';
 
 export default function Users({ _session, _data }) {
   const [showInviteTeacher, setShowInviteTeacher] = useState(false);
   const [showInviteStudent, setShowInviteStudent] = useState(false);
+  const [inviteError, setInviteError] = useState(null);
   const [email, setEmail] = useState('');
-  function handleInviteTeacherSubmit() {}
+  async function handleInviteTeacherSubmit() {
+    const invitation = await axios.post(
+      `${getApiUrl()}/courses/invite`,
+      {
+        courseId: _data.course._id,
+        email,
+        type: 0,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${_session?.jwt}`,
+        },
+      }
+    );
+    if (invitation.data.success) {
+      setShowInviteTeacher(false);
+      setEmail('');
+    } else {
+      setInviteError(invitation.data.message);
+    }
+  }
 
-  function handleInviteStudentSubmit() {}
+  async function handleInviteStudentSubmit() {
+    const invitation = await axios.post(
+      `${getApiUrl()}/courses/invite`,
+      {
+        courseId: _data.course._id,
+        email,
+        type: 1,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${_session?.jwt}`,
+        },
+      }
+    );
+    if (invitation.data.success) {
+      setShowInviteStudent(false);
+      setEmail('');
+    } else {
+      setInviteError(invitation.data.message);
+    }
+  }
 
   const inviteTeacherContent = (
     <>
@@ -24,6 +66,7 @@ export default function Users({ _session, _data }) {
         placeholder="Email"
         className="input input-info input-bordered"
       />
+      {inviteError && <p>{inviteError}</p>}
     </>
   );
   const inviteTeacherActions = (
@@ -138,7 +181,7 @@ export default function Users({ _session, _data }) {
                     className="rounded-full h-12"
                     src="https://lh3.googleusercontent.com/a/default-user=s75-c"
                   />
-                  <div className="p-2">{student.fullName}</div>
+                  <div className="p-2">{student.name}</div>
                 </div>
               ))}
             </div>
