@@ -149,7 +149,9 @@ function Header() {
                       </div>
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
-                          {session?.user?.name}
+                          {session?.user?.name
+                            ? session.user.name
+                            : session.user.email}
                         </div>
                         <div className="text-sm font-medium leading-none text-gray-400">
                           {session.user.email}
