@@ -146,7 +146,7 @@ export default function Users({ _session, _data }) {
                     className="rounded-full h-12"
                     src="https://lh3.googleusercontent.com/a/default-user=s75-c"
                   />
-                  <div className="p-2">{teacher.name}</div>
+                  <div className="p-2">{teacher.name} ({teacher.email})</div>
                 </div>
               ))}
             </div>
@@ -181,7 +181,7 @@ export default function Users({ _session, _data }) {
                     className="rounded-full h-12"
                     src="https://lh3.googleusercontent.com/a/default-user=s75-c"
                   />
-                  <div className="p-2">{student.name}</div>
+                  <div className="p-2">{student.name} ({student.email})</div>
                 </div>
               ))}
             </div>
@@ -215,7 +215,10 @@ export async function getServerSideProps(ctx) {
     }
   } else {
     return {
-      props: { _session, _data: null },
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
     };
   }
 }

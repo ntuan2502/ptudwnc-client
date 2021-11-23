@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { getSession } from 'next-auth/react';
-import { getApiUrl } from '../../../lib/Utils';
-import axios from 'axios';
+import Link from "next/link";
+import { getSession } from "next-auth/react";
+import { getApiUrl } from "../../../lib/Utils";
+import axios from "axios";
 export default function CoursePage({ _session, _data }) {
   return (
     <>
@@ -69,10 +69,10 @@ export default function CoursePage({ _session, _data }) {
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
 
-  const res = await fetch(getApiUrl('/courses/' + ctx.query.slug), {
-    method: 'GET',
+  const res = await fetch(getApiUrl("/courses/" + ctx.query.slug), {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
@@ -103,7 +103,10 @@ export async function getServerSideProps(ctx) {
     }
   } else {
     return {
-      props: { _session, _data: null },
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
     };
   }
 }

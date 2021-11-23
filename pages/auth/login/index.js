@@ -1,6 +1,7 @@
 import { getCsrfToken } from "next-auth/react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import Link from "next/link";
+import { getApiUrl } from "../../../lib/Utils";
 export default function Login({ csrfToken }) {
   return (
     <div className="flex justify-center min-h-screen items-center">
@@ -9,7 +10,8 @@ export default function Login({ csrfToken }) {
           Login To Your Account
         </div>
         <div className="flex gap-4 item-center">
-          <button onClick={() => signIn('facebook')}
+          <button
+            onClick={() => signIn("facebook")}
             type="button"
             className="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
           >
@@ -26,7 +28,8 @@ export default function Login({ csrfToken }) {
             Facebook
           </button>
 
-          <button onClick={() => signIn('google')}
+          <button
+            onClick={() => signIn("google")}
             type="button"
             className="py-2 px-4 flex justify-center items-center  bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
           >
@@ -126,10 +129,25 @@ export default function Login({ csrfToken }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
+export async function getServerSideProps(ctx) {
+  const _session = await getSession(ctx);
+  const res = await fetch(getApiUrl("/users/" + _session?.user?._id), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${_session?.jwt}`,
     },
-  };
+  });
+  if (res.ok) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  } else {
+    return {
+      props: { csrfToken: await getCsrfToken(ctx) },
+    };
+  }
 }

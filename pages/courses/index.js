@@ -51,7 +51,10 @@ export async function getServerSideProps(ctx) {
     }
   } else {
     return {
-      props: { _session, _data: null },
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
     };
   }
 }

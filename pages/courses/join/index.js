@@ -43,11 +43,34 @@ const JoinCode = ({ _session }) => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
+export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
-  return {
-    props: { _session },
-  };
-};
+  const res = await fetch(getApiUrl("/users/" + _session?.user?._id), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${_session?.jwt}`,
+    },
+  });
+  if (res.ok) {
+    const _data = await res.json();
+    if (_data.success) {
+      return {
+        props: { _session, _data },
+      };
+    } else {
+      return {
+        props: { _session, _data: null },
+      };
+    }
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
+    };
+  }
+}
 
 export default JoinCode;

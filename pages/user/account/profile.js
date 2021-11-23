@@ -1,32 +1,32 @@
-import { getSession } from 'next-auth/react';
-import { useState } from 'react';
-import Loading from '../../../components/Loading';
-import { getApiUrl } from '../../../lib/Utils';
+import { getSession } from "next-auth/react";
+import { useState } from "react";
+import Loading from "../../../components/Loading";
+import { getApiUrl } from "../../../lib/Utils";
 
 export default function Profile({ _session, _data }) {
-  console.log('data', _data);
+  console.log("data", _data);
   const [studentId, setStudentId] = useState(_data?.user?.student);
   const [email, setEmail] = useState(_data?.user?.email);
   const [name, setName] = useState(_data?.user?.name);
-  const [alert, setAlert] = useState('');
+  const [alert, setAlert] = useState("");
 
   const handleSubmit = async () => {
-    setAlert('');
-    fetch(getApiUrl('/users/' + _data?.user?._id), {
-      method: 'PUT',
+    setAlert("");
+    fetch(getApiUrl("/users/" + _data?.user?._id), {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${_session?.jwt}`,
       },
       body: JSON.stringify({ name, student: studentId }),
     })
       .then((response) => response.json())
       .then((data) => {
-        setAlert('Updated profile');
-        console.log(_session, _data, 'Updated profile');
+        setAlert("Updated profile");
+        console.log(_session, _data, "Updated profile");
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
   };
 
@@ -131,17 +131,15 @@ export default function Profile({ _session, _data }) {
 
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
-  // console.log(_session);
-  const res = await fetch(getApiUrl('/users/' + _session?.user?._id), {
-    method: 'GET',
+  const res = await fetch(getApiUrl("/users/" + _session?.user?._id), {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
   if (res.ok) {
     const _data = await res.json();
-    console.log(_data);
     if (_data.success) {
       return {
         props: { _session, _data },
@@ -153,7 +151,10 @@ export async function getServerSideProps(ctx) {
     }
   } else {
     return {
-      props: { _session, _data: null },
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
     };
   }
 }
