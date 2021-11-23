@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { getApiUrl } from "../../lib/Utils";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 
-export default function AddModal() {
+export default function AddModal({ API_URL }) {
   const { data: session, status } = useSession();
   const [alert, setAlert] = useState("");
   const [name, setName] = useState("");
@@ -21,7 +20,7 @@ export default function AddModal() {
     if (name == "") {
       setAlert("Name is required");
     } else {
-      fetch(getApiUrl("/courses/store"), {
+      fetch(API_URL + "/courses/store", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

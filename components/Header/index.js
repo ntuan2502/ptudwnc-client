@@ -1,4 +1,4 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Fragment, memo } from "react";
 import { Popover, Menu, Transition } from "@headlessui/react";

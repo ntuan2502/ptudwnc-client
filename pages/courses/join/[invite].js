@@ -1,7 +1,7 @@
-import React from 'react';
-import axios from 'axios';
-import { getApiUrl } from '../../../lib/Utils';
-import { getSession } from 'next-auth/react';
+import React from "react";
+import axios from "axios";
+import { getApiUrl } from "../../../lib/Utils";
+import { getSession } from "next-auth/react";
 
 const JoinCourse = ({ success, error, course }) => {
   if (success) {
@@ -19,7 +19,7 @@ export const getServerSideProps = async (ctx) => {
       `${getApiUrl()}/courses/join/${inviteCode}`,
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${_session?.jwt}`,
         },
       }

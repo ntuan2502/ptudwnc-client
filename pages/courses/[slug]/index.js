@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { getApiUrl } from "../../../lib/Utils";
 import axios from "axios";
-export default function CoursePage({ _session, _data }) {
+export default function CoursePage({ _data }) {
   return (
     <>
       {_data && (
@@ -94,7 +94,7 @@ export async function getServerSideProps(ctx) {
       }
 
       return {
-        props: { _session, _data },
+        props: { _data },
       };
     } else {
       return {

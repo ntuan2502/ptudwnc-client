@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { getApiUrl } from "../../../lib/Utils";
 import { signIn, getSession } from "next-auth/react";
 
-export default function Register() {
+export default function Register({ API_URL }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +21,7 @@ export default function Register() {
     } else if (password !== confirmPassword) {
       setAlert("Passwords are not the same!");
     } else {
-      fetch(getApiUrl("/auth/register"), {
+      fetch(API_URL + "/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -212,7 +212,7 @@ export async function getServerSideProps(ctx) {
     };
   } else {
     return {
-      props: {},
+      props: { API_URL: getApiUrl() },
     };
   }
 }

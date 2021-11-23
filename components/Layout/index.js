@@ -6,9 +6,7 @@ export default function Layout({ children }) {
     <>
       <Header />
       <div className="flex justify-center">
-        <div className="min-h-screen w-full p-5">
-          {children}
-        </div>
+        <div className="min-h-screen w-full p-5">{children}</div>
       </div>
       <Footer />
     </>

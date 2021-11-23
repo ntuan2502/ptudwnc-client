@@ -9,6 +9,7 @@ const JoinCode = ({ _session, API_URL }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     if (code.length !== 8) {
       setError("Invalid code");
       return;
@@ -19,28 +20,36 @@ const JoinCode = ({ _session, API_URL }) => {
       },
     });
     if (res.data.success) {
-      window.location.href = `/courses/${res.data.course._id}`;
+      window.location.href = `/courses/${res.data.course.slug}`;
     } else {
       setError("Invalid code");
     }
   };
 
   return (
-    <form className="flex justify-center items-center mt-10">
-      <input
-        className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white"
-        placeholder="Invite code"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-      />
-      <button
-        onClick={handleSubmit}
-        className="px-8 rounded-r-lg bg-blue-400  text-gray-800 font-bold p-4 uppercase border-blue-500 border-t border-b border-r"
-      >
-        Join
-      </button>
-      {error && <p className="text-red-500 text-xs italic">{error}</p>}
-    </form>
+    <div>
+      <form className="flex justify-center items-center mt-10">
+        <div>
+          <input
+            className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white"
+            placeholder="Invite code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <button
+            onClick={handleSubmit}
+            className="px-8 rounded-r-lg bg-blue-400  text-gray-800 font-bold p-4 uppercase border-blue-500 border-t border-b border-r"
+          >
+            Join
+          </button>
+        </div>
+      </form>
+      {error && (
+        <div className="flex justify-center items-center">
+          <p className="text-red-500 text-xs text-lg italic">{error}</p>
+        </div>
+      )}
+    </div>
   );
 };
 
