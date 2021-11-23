@@ -212,7 +212,7 @@ export async function getServerSideProps(ctx) {
     };
   } else {
     return {
-      props: { csrfToken: await getCsrfToken(ctx) },
+      props: {},
     };
   }
 }
