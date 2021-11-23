@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
+import { getApiUrl } from '../../../lib/Utils';
 
 const JoinCode = ({ _session }) => {
   const [code, setCode] = useState('');
@@ -12,7 +13,7 @@ const JoinCode = ({ _session }) => {
       setError('Invalid code');
       return;
     }
-    const res = await axios.get(`/courses/join/${code}`, {
+    const res = await axios.get(`${getApiUrl()}/courses/join/${code}`, {
       headers: {
         Authorization: `Bearer ${_session?.jwt}`,
       },
@@ -45,10 +46,10 @@ const JoinCode = ({ _session }) => {
 
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
-  const res = await fetch(getApiUrl("/users/" + _session?.user?._id), {
-    method: "GET",
+  const res = await fetch(getApiUrl('/users/' + _session?.user?._id), {
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
@@ -67,7 +68,7 @@ export async function getServerSideProps(ctx) {
     return {
       redirect: {
         permanent: false,
-        destination: "/auth/login",
+        destination: '/auth/login',
       },
     };
   }
