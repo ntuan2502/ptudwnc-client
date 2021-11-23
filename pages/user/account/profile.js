@@ -3,8 +3,8 @@ import { useState } from "react";
 import Loading from "../../../components/Loading";
 import { getApiUrl } from "../../../lib/Utils";
 
-export default function Profile({ _session, _data }) {
-  console.log("data", _data);
+export default function Profile({ _session, _data, API_URL }) {
+  // console.log("data", _data);
   const [studentId, setStudentId] = useState(_data?.user?.student);
   const [email, setEmail] = useState(_data?.user?.email);
   const [name, setName] = useState(_data?.user?.name);
@@ -12,7 +12,7 @@ export default function Profile({ _session, _data }) {
 
   const handleSubmit = async () => {
     setAlert("");
-    fetch(getApiUrl("/users/" + _data?.user?._id), {
+    fetch(API_URL + "/users/" + _data?.user?._id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export default function Profile({ _session, _data }) {
       .then((response) => response.json())
       .then((data) => {
         setAlert("Updated profile");
-        console.log(_session, _data, "Updated profile");
+        // console.log(_session, _data, "Updated profile");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -142,11 +142,11 @@ export async function getServerSideProps(ctx) {
     const _data = await res.json();
     if (_data.success) {
       return {
-        props: { _session, _data },
+        props: { _session, _data, API_URL: getApiUrl() },
       };
     } else {
       return {
-        props: { _session, _data: null },
+        props: { _session, _data: null, API_URL: getApiUrl() },
       };
     }
   } else {
