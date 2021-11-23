@@ -207,7 +207,7 @@ export async function getServerSideProps(ctx) {
     return {
       redirect: {
         permanent: false,
-        destination: "/",
+        destination: "/courses",
       },
     };
   } else {

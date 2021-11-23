@@ -1,7 +1,7 @@
 import { getCsrfToken } from "next-auth/react";
 import { signIn, getSession } from "next-auth/react";
-import Link from "next/link";
 import { getApiUrl } from "../../../lib/Utils";
+import Link from "next/link";
 export default function Login({ csrfToken }) {
   return (
     <div className="flex justify-center min-h-screen items-center">
@@ -142,7 +142,7 @@ export async function getServerSideProps(ctx) {
     return {
       redirect: {
         permanent: false,
-        destination: "/",
+        destination: "/courses",
       },
     };
   } else {

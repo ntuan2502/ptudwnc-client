@@ -61,7 +61,10 @@ export async function getServerSideProps(ctx) {
       };
     } else {
       return {
-        props: { _session, _data: null, API_URL: getApiUrl() },
+        redirect: {
+          permanent: false,
+          destination: "/courses",
+        },
       };
     }
   } else {

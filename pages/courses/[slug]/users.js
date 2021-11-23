@@ -1,14 +1,14 @@
-import { getSession } from 'next-auth/react';
-import { getApiUrl } from '../../../lib/Utils';
-import { useState } from 'react';
-import InviteModal from '../../../components/Course/InviteModal';
-import axios from 'axios';
+import { getSession } from "next-auth/react";
+import { getApiUrl } from "../../../lib/Utils";
+import { useState } from "react";
+import InviteModal from "../../../components/Course/InviteModal";
+import axios from "axios";
 
 export default function Users({ _session, _data }) {
   const [showInviteTeacher, setShowInviteTeacher] = useState(false);
   const [showInviteStudent, setShowInviteStudent] = useState(false);
   const [inviteError, setInviteError] = useState(null);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   async function handleInviteTeacherSubmit() {
     const invitation = await axios.post(
       `${getApiUrl()}/courses/invite`,
@@ -25,7 +25,7 @@ export default function Users({ _session, _data }) {
     );
     if (invitation.data.success) {
       setShowInviteTeacher(false);
-      setEmail('');
+      setEmail("");
     } else {
       setInviteError(invitation.data.message);
     }
@@ -47,7 +47,7 @@ export default function Users({ _session, _data }) {
     );
     if (invitation.data.success) {
       setShowInviteStudent(false);
-      setEmail('');
+      setEmail("");
     } else {
       setInviteError(invitation.data.message);
     }
@@ -146,7 +146,9 @@ export default function Users({ _session, _data }) {
                     className="rounded-full h-12"
                     src="https://lh3.googleusercontent.com/a/default-user=s75-c"
                   />
-                  <div className="p-2">{teacher.name} ({teacher.email})</div>
+                  <div className="p-2">
+                    {teacher.name} ({teacher.email})
+                  </div>
                 </div>
               ))}
             </div>
@@ -181,7 +183,9 @@ export default function Users({ _session, _data }) {
                     className="rounded-full h-12"
                     src="https://lh3.googleusercontent.com/a/default-user=s75-c"
                   />
-                  <div className="p-2">{student.name} ({student.email})</div>
+                  <div className="p-2">
+                    {student.name} ({student.email})
+                  </div>
                 </div>
               ))}
             </div>
@@ -195,10 +199,10 @@ export default function Users({ _session, _data }) {
 export async function getServerSideProps(ctx) {
   const _session = await getSession(ctx);
 
-  const res = await fetch(getApiUrl('/courses/' + ctx.query.slug), {
-    method: 'GET',
+  const res = await fetch(getApiUrl("/courses/" + ctx.query.slug), {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${_session?.jwt}`,
     },
   });
@@ -210,7 +214,10 @@ export async function getServerSideProps(ctx) {
       };
     } else {
       return {
-        props: { _session, _data: null },
+        redirect: {
+          permanent: false,
+          destination: "/courses",
+        },
       };
     }
   } else {
