@@ -22,8 +22,9 @@ export default function Profile({ _session, _data, API_URL }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setAlert("Updated profile");
-        // console.log(_session, _data, "Updated profile");
+        if (data.success == false) setAlert("StudentId already exists");
+        else setAlert("Updated profile");
+        // console.log(_session, _data, data, "Updated profile");
       })
       .catch((error) => {
         console.error("Error:", error);
