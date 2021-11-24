@@ -158,13 +158,6 @@ export default function Register({ API_URL }) {
                 <div className="inline-flex text-xs font-bold text-red-500 sm:text-sm dark:text-gray-100 hover:text-gray-700 dark:hover:text-white">
                   {alert}
                 </div>
-
-                {/* <a
-                  href="#"
-                  className="inline-flex text-xs font-thin text-gray-500 sm:text-sm dark:text-gray-100 hover:text-gray-700 dark:hover:text-white"
-                >
-                  Forgot Your Password?
-                </a> */}
               </div>
             </div>
             <div className="flex w-full">

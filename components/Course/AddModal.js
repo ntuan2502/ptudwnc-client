@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router'
 
 export default function AddModal({ API_URL }) {
+  const router = useRouter()
   const { data: session, status } = useSession();
   const [alert, setAlert] = useState("");
   const [name, setName] = useState("");
@@ -30,10 +32,11 @@ export default function AddModal({ API_URL }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data, "Added Course");
+          // console.log(data, "Added Course");
           setName("");
           setDescription("");
           handleClose();
+          router.push("/courses")
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -72,7 +75,7 @@ export default function AddModal({ API_URL }) {
                 </svg>
               </div>
               <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
-                Add Course
+                Add Course {API_URL}
               </h1>
 
               <div className="form-control">
