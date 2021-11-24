@@ -75,7 +75,7 @@ export default function AddModal({ API_URL }) {
                 </svg>
               </div>
               <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
-                Add Course {API_URL}
+                Add Course
               </h1>
 
               <div className="form-control">
